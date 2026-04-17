@@ -8,7 +8,21 @@ const Saatmine = tekst.value;
 
 nupp.addEventListener('click', async function () {
     const Saatmine = tekst.value;
+    const eesnimi = nimi.value;
     console.log(Saatmine);
+
+    const text = await fetch('https://tinkr.tech/sdb/Martin/Martin-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: eesnimi, text: Saatmine })
+    });
+    const textdata = await text.json();
+    
+    const h2 = document.createElement('h2');
+    h2.textContent = textdata.username + ': ' + textdata.text;
+    document.getElementById('sõnum').appendChild(h2);
+    
+    tekst.value = '';
 })
 
 player_key = localStorage.getItem('player_key');
@@ -71,5 +85,6 @@ kaart.addEventListener('click', async function (e) {
     const andmed = await vastus.json();
     console.log(andmed);
 });
+
 
 
