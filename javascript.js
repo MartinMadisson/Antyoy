@@ -1,29 +1,8 @@
 let nimi = document.querySelector('#nimi');
 const Liitu = document.querySelector('#salvesta');
 const kaart = document.querySelector('#kaart');
-let tekst = document.querySelector(`#tekst`);
-const nupp = document.querySelector(`#Saada`);
-const Saatmine = tekst.value;
-
- 
-nupp.addEventListener('click', async function () {
-    const Saatmine = tekst.value;
-    const eesnimi = nimi.value;
-    console.log(Saatmine);
-
-    const text = await fetch('https://tinkr.tech/sdb/Martin/Martin-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: eesnimi, text: Saatmine })
-    });
-    const textdata = await text.json();
-    
-    const h2 = document.createElement('h2');
-    h2.textContent = textdata.username + ': ' + textdata.text;
-    document.getElementById('sõnum').appendChild(h2);
-    
-    tekst.value = '';
-})
+let tekst = document.querySelector('#tekst');
+const nupp = document.querySelector('#Saada');
 
 player_key = localStorage.getItem('player_key');
 
@@ -41,7 +20,22 @@ Liitu.addEventListener('click', async function () {
     console.log(andmed);
 
     localStorage.setItem('player_key', andmed.player_key);
-    player_key = andmed.player_key; 
+    player_key = andmed.player_key;
+});
+
+nupp.addEventListener('click', async function () {
+    const sonum = tekst.value;
+    const player_key = localStorage.getItem('player_key');
+
+    const vastus = await fetch('https://tinkr.tech/sdb/Martin/wanderworld', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'talk', player_key: player_key, message: sonum })
+    });
+
+    const andmed = await vastus.json();
+    console.log(andmed);
+    tekst.value = '';
 });
 
 setInterval(async function () {
@@ -55,6 +49,15 @@ setInterval(async function () {
         div.style.position = 'absolute';
         div.style.left = mangija.x + 'px';
         div.style.top = mangija.y + 'px';
+
+        if (mangija.message !== null) {
+            const lehm = document.createElement('div');
+            lehm.textContent = mangija.message;
+            lehm.style.color = 'white';
+            lehm.style.padding = '4px 8px';
+            lehm.style.fontSize = '15px';
+            div.appendChild(lehm);
+        }
 
         const pilt = document.createElement('img');
         pilt.src = 'https://tinkr.tech' + mangija.image;
@@ -85,6 +88,3 @@ kaart.addEventListener('click', async function (e) {
     const andmed = await vastus.json();
     console.log(andmed);
 });
-
-
-
