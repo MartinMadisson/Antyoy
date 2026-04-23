@@ -5,7 +5,7 @@ let tekst = document.querySelector(`#tekst`);
 const nupp = document.querySelector(`#Saada`);
 const Saatmine = tekst.value;
 
-
+ 
 nupp.addEventListener('click', async function () {
     const Saatmine = tekst.value;
     const eesnimi = nimi.value;
